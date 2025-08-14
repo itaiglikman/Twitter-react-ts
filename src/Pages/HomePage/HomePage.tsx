@@ -1,36 +1,33 @@
 import { useEffect, useState } from "react";
 import { CreateTwitt } from "../../Components/HomeArea/CreateTwitt/CreateTwitt";
 import { TwittsList } from "../../Components/HomeArea/TwittsList/TwittsList";
-import { TwittsContexts } from "../../Lib/Context/TwitterContext";
+import { apiURL } from "../../Lib/Constants";
+import { TwittsContext } from "../../Lib/Context/TwitterContext";
 import { type TwittType } from "../../Lib/Types/types";
 import "./HomePage.css";
+import axios from "axios";
 
 export function HomePage() {
 
     const [twitts, setTwitts] = useState<TwittType[]>([]);
 
     useEffect(() => {
-        const localResults = localStorage.getItem('twitts');
-        if (localResults) {
-            const localTwitts = JSON.parse(localResults);
-            setTwitts(localTwitts || []);
+        async function getTwitts(): Promise<void> {
+            const result = await axios.get(apiURL);
+            // should return error
+            if (!result) return;
+            setTwitts(result.data as TwittType[]);
         }
-        else {
-            setTwitts([]);
-        }
-    }, [])
 
-    useEffect(() => {
-        localStorage.setItem('twitts', JSON.stringify(twitts));
+        getTwitts()
     }, [twitts])
-
 
     return (
         <div className="HomePage">
-            <TwittsContexts value={[twitts, setTwitts]}>
+            <TwittsContext value={[twitts, setTwitts]}>
                 <CreateTwitt />
                 <TwittsList />
-            </TwittsContexts>
+            </TwittsContext>
         </div>
     );
 }
