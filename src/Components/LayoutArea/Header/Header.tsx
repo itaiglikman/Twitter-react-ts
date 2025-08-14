@@ -19,6 +19,7 @@ export function Header() {
     <a
       key={link.label}
       className={classes.link}
+      href={link.link}
       data-active={active === link.link || undefined}
       onClick={(event) => {
         event.preventDefault();
