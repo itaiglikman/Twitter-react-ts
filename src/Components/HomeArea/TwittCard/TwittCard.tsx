@@ -1,21 +1,27 @@
-import "./TwittCard.css";
 import { Avatar, Group, Paper, Text, TypographyStylesProvider } from '@mantine/core';
+import type { TwittType } from "../../../Lib/Types/types";
+import "./TwittCard.css";
 import classes from './TwittCard.module.css';
 
-export function TwittCard() {
+interface TwittCardProps {
+    twitt: TwittType;
+}
+
+export function TwittCard({ twitt }: TwittCardProps) {
+    const date = new Date(twitt.date);
     return (
         <div className="TwittCard">
             <Paper withBorder radius="md" className={classes.comment}>
                 <Group>
                     <Avatar
                         src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
-                        alt="Jacob Warnhalter"
+                        alt={twitt.userName}
                         radius="xl"
                     />
                     <div>
-                        <Text fz="sm">Jacob Warnhalter</Text>
+                        <Text fz="sm">{twitt.userName}</Text>
                         <Text fz="xs" c="dimmed">
-                            10 minutes ago
+                            {date.toLocaleString()}
                         </Text>
                     </div>
                 </Group>
@@ -24,7 +30,7 @@ export function TwittCard() {
                         className={classes.content}
                         dangerouslySetInnerHTML={{
                             __html:
-                                '<p>I use <a href="https://heroku.com/" rel="noopener noreferrer" target="_blank">Heroku</a> to host my Node.js application, but MongoDB add-on appears to be too <strong>expensive</strong>. I consider switching to <a href="https://www.digitalocean.com/" rel="noopener noreferrer" target="_blank">Digital Ocean</a> VPS to save some cash.</p>',
+                                `<p>${twitt.content}</p>`,
                         }}
                     />
                 </TypographyStylesProvider>
