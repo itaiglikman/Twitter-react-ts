@@ -1,5 +1,9 @@
 .TwittsList {
-	display: flex;
+    margin: auto;
+}
+
+.TwittsList .cards-container{
+    display: flex;
     flex-direction: column;
     gap: 10px;
 }
