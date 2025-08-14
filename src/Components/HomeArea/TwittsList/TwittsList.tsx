@@ -7,7 +7,7 @@ export function TwittsList() {
     return (
         <div className="TwittsList">
             {twitts.map(t =>
-                <TwittCard twitt={t}/>
+                <TwittCard key={t.id} twitt={t} />
             )}
 
         </div>

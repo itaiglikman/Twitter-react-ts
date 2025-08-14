@@ -1,13 +1,25 @@
 import { Button, Container, Text, Textarea } from '@mantine/core';
 import { useState } from 'react';
+import { useTwitterContext } from '../../../Lib/Context/TwitterContext';
+import twittsUtils from '../../../Lib/Utils/twittsUtils';
 import "./CreateTwitt.css";
 import classes from './CreateTwitt.module.css';
 
 export function CreateTwitt() {
+    // mantine:
     const [focused, setFocused] = useState(false);
     const [value, setValue] = useState('');
     const isDisabled = value.trim() === "" || value.trim().length > 140;
     const floating = value.trim().length !== 0 || focused || undefined;
+
+    const [twitts, setTwitts] = useTwitterContext();
+
+    function handlePost() {
+        const post = twittsUtils.createPost(value);
+        setTwitts([...twitts, post]);
+        setValue('');
+    }
+
     return (
         <div className="CreateTwitt">
             <Textarea
@@ -32,7 +44,7 @@ export function CreateTwitt() {
                 >
                     {value.trim().length}/140
                 </Text>
-                <Button p={'xs'} disabled={isDisabled}>Post</Button>
+                <Button p={'xs'} disabled={isDisabled} onClick={handlePost}>Post</Button>
             </Container>
         </div>
     );
