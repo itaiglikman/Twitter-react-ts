@@ -6,6 +6,10 @@ export function TwittsList() {
         <div className="TwittsList">
 
             <TwittCard />
+            <TwittCard />
+            <TwittCard />
+            <TwittCard />
+            <TwittCard />
 
         </div>
     );
