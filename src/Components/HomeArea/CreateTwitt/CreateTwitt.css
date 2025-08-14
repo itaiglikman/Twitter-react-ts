@@ -1,3 +1,16 @@
 .CreateTwitt {
-	
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    width: fit-content;
+    margin: auto;
+}
+
+.CreateTwitt .bottom-area{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
 }
