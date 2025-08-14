@@ -4,20 +4,38 @@ import { useTwitterContext } from '../../../Lib/Context/TwitterContext';
 import twittsUtils from '../../../Lib/Utils/twittsUtils';
 import "./CreateTwitt.css";
 import classes from './CreateTwitt.module.css';
+import axios from 'axios';
+import { apiURL } from '../../../Lib/Constants';
 
 export function CreateTwitt() {
     // mantine:
     const [focused, setFocused] = useState(false);
-    const [value, setValue] = useState('');
-    const isDisabled = value.trim() === "" || value.trim().length > 140;
-    const floating = value.trim().length !== 0 || focused || undefined;
+    const [content, setContent] = useState('');
+    const [errMsg,setErrMsg] = useState('');
+    const floating = content.trim().length !== 0 || focused || undefined;
 
     const [twitts, setTwitts] = useTwitterContext();
+    const isDisabled = // don't allow posting
+        content.trim() === "" // no content
+        || content.trim().length > 140 // over max chars
+        //not working
+        || !twitts; //while loading posts 
 
-    function handlePost() {
-        const post = twittsUtils.createPost(value);
-        setTwitts([...twitts, post]);
-        setValue('');
+    async function handlePost() {
+        try {
+            // create object for database:
+            const postToSend = { content: content, userName: 'john', date: new Date().toISOString() }
+            const result = await axios.post(apiURL, postToSend);
+            console.log(result);
+            const post = twittsUtils.createPost(content);
+            //should get twitts from server
+            setTwitts([...twitts, post]);
+            setContent('');
+            setErrMsg('');
+        } catch (error: any) {
+            setErrMsg("Couldn't post the tweet...");
+            console.log(error);
+        }
     }
 
     return (
@@ -28,21 +46,22 @@ export function CreateTwitt() {
                 placeholder="Write here your tweet"
                 required
                 classNames={classes}
-                value={value}
-                onChange={(event) => setValue(event.currentTarget.value)}
+                value={content}
+                onChange={(event) => setContent(event.currentTarget.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
                 mt="md"
                 autoComplete="nope"
                 data-floating={floating}
                 labelProps={{ 'data-floating': floating }}
+                error={errMsg}
             />
             <Container className='bottom-area'>
                 <Text
-                    color={value ? (isDisabled ? 'red' : 'green') : ''}
+                    color={content ? (isDisabled ? 'red' : 'green') : ''}
                     fz={'sm'}
                 >
-                    {value.trim().length}/140
+                    {content.trim().length}/140
                 </Text>
                 <Button p={'xs'} disabled={isDisabled} onClick={handlePost}>Post</Button>
             </Container>
