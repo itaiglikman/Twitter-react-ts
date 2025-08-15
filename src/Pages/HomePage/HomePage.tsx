@@ -8,7 +8,6 @@ import "./HomePage.css";
 import axios from "axios";
 
 export function HomePage() {
-
     const [twitts, setTwitts] = useState<TwittType[]>([]);
 
     useEffect(() => {
@@ -20,7 +19,7 @@ export function HomePage() {
         }
 
         getTwitts()
-    }, [twitts])
+    }, [])
 
     return (
         <div className="HomePage">
