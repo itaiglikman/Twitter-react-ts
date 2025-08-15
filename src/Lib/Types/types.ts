@@ -1,5 +1,5 @@
 export interface TwittType {
-    id: string;
+    id?: number; // as in db
     date: string;
     userName: string;
     content: string;
