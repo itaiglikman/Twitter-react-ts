@@ -6,28 +6,34 @@ import "./CreateTwitt.css";
 import classes from './CreateTwitt.module.css';
 import axios from 'axios';
 import { apiURL } from '../../../Lib/Constants';
+import { useUserContext } from '../../../Lib/Context/UserContext';
 
 export function CreateTwitt() {
     // mantine:
     const [focused, setFocused] = useState(false);
     const [content, setContent] = useState('');
-    const [errMsg,setErrMsg] = useState('');
     const floating = content.trim().length !== 0 || focused || undefined;
 
+    const [errMsg, setErrMsg] = useState('');
     const [twitts, setTwitts] = useTwitterContext();
+    const [userName] = useUserContext();
+    const isConnected = userName.length > 0;
+    const textAreaLabel = isConnected ? "Tell the world what you're thinking about" : "Please set user before posting"
+
+    console.log(userName);
     const isDisabled = // don't allow posting
         content.trim() === "" // no content
         || content.trim().length > 140 // over max chars
         //not working
-        || !twitts; //while loading posts 
+        || !twitts //while loading posts 
+        || !userName
 
     async function handlePost() {
         try {
             // create object for database:
-            const postToSend = { content: content, userName: 'john', date: new Date().toISOString() }
+            const postToSend = { content: content, userName, date: new Date().toISOString() }
             const result = await axios.post(apiURL, postToSend);
-            console.log(result);
-            const post = twittsUtils.createPost(content);
+            const post = twittsUtils.createPost(userName, content);
             //should get twitts from server
             setTwitts([...twitts, post]);
             setContent('');
@@ -42,7 +48,7 @@ export function CreateTwitt() {
         <div className="CreateTwitt">
             <Textarea
                 styles={{ input: { width: "300px", height: '100px' } }}
-                label="Tell the world what you're thinking about"
+                label={textAreaLabel}
                 placeholder="Write here your tweet"
                 required
                 classNames={classes}

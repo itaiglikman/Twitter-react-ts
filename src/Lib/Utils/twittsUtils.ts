@@ -1,10 +1,10 @@
 import type { TwittType } from "../Types/types";
 
-function createPost(content: string) {
+function createPost(userName: string, content: string) {
     const post: TwittType = {
         id: crypto.randomUUID(),
         date: new Date().toISOString(),
-        userName: 'John',
+        userName,
         content
     }
     return post;

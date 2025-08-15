@@ -1,3 +1,11 @@
 .ProfilePage {
-	
+  display: flex;
+  flex-direction: column;
+}
+
+.ProfilePage .input-area {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
