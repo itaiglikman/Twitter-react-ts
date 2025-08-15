@@ -10,7 +10,7 @@ import "./index.css";
 createRoot(document.getElementById("root")!).render(
     //   <StrictMode>
     <MantineProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/Twitter-react-ts">
             <App />
         </BrowserRouter>
     </MantineProvider>
