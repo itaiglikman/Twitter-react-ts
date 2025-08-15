@@ -4,9 +4,8 @@ import { useTwitterContext } from '../../../Lib/Context/TwitterContext';
 import twittsUtils from '../../../Lib/Utils/twittsUtils';
 import "./CreateTwitt.css";
 import classes from './CreateTwitt.module.css';
-import axios from 'axios';
-import { apiURL } from '../../../Lib/Constants';
 import { useUserContext } from '../../../Lib/Context/UserContext';
+import { dbName, supabaseDB } from '../../../../DB/supabaseConfig';
 
 export function CreateTwitt() {
     // mantine:
@@ -30,11 +29,12 @@ export function CreateTwitt() {
     async function handlePost() {
         try {
             // create object for database:
-            const postToSend = { content: content, userName, date: new Date().toISOString() }
-            const result = await axios.post(apiURL, postToSend);
             const post = twittsUtils.createPost(userName, content);
+            const { data, error } = await supabaseDB.from(dbName).insert([post]).select();
+            if (error) throw error;
+            const dbPost = data[0];
             //should get twitts from server
-            setTwitts([...twitts, post]);
+            setTwitts([...twitts, dbPost]);
             setContent('');
             setErrMsg('');
         } catch (error: any) {
