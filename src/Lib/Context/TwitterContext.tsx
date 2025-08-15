@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
-import { type TwittsContextsTuple } from "../Types/types";
+import { type TwittsContextTuple } from "../Types/types";
 
-export const TwittsContext = createContext<TwittsContextsTuple>([[], () => { }]);
+export const TwittsContext = createContext<TwittsContextTuple>([[], () => { }]);
 
 export const useTwitterContext = () => {
     return useContext(TwittsContext);
