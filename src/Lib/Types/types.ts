@@ -5,5 +5,6 @@ export interface TwittType {
     content: string;
 }
 
-export type TwittsContextsTuple = [TwittType[], React.Dispatch<React.SetStateAction<TwittType[]>>]
+export type TwittsContextTuple = [TwittType[], React.Dispatch<React.SetStateAction<TwittType[]>>];
+export type UserContextTuple = [string, React.Dispatch<React.SetStateAction<string>>];
 
