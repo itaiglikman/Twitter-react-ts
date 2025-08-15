@@ -12,13 +12,22 @@ export function HomePage() {
 
     useEffect(() => {
         async function getTwitts(): Promise<void> {
-            const result = await axios.get(apiURL);
-            // should return error
-            if (!result) return;
-            setTwitts(result.data as TwittType[]);
+            try {
+                const result = await axios.get(apiURL);
+                setTwitts(result.data as TwittType[]);
+            } catch (error: any) {
+                console.log(error.message);
+            }
         }
 
-        getTwitts()
+        getTwitts(); // first api call
+
+        const interval = setInterval(() => {
+            console.log('fetch');
+            getTwitts();
+        }, 5000);
+
+        return () => clearInterval(interval);
     }, [])
 
     return (

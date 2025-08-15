@@ -20,7 +20,6 @@ export function CreateTwitt() {
     const isConnected = userName.length > 0;
     const textAreaLabel = isConnected ? "Tell the world what you're thinking about" : "Please set user before posting"
 
-    console.log(userName);
     const isDisabled = // don't allow posting
         content.trim() === "" // no content
         || content.trim().length > 140 // over max chars
