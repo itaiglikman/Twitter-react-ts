@@ -9,6 +9,16 @@ function createPost(userName: string, content: string) {
     return post;
 }
 
+// digest row userName to a specific pattern User_Name
+function formatUserName(rowUserName: string): string {
+    return rowUserName
+        .trim()
+        .split(' ')
+        .map(word => word.length > 0 ? word[0].toUpperCase() + word.slice(1) : '')
+        .join('_');
+}
+
 export default {
     createPost,
+    formatUserName,
 }

@@ -1,19 +1,30 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { dbName, supabaseDB } from '../../../DB/supabaseConfig';
 import { CreateTwitt } from "../../Components/HomeArea/CreateTwitt/CreateTwitt";
 import { TwittsList } from "../../Components/HomeArea/TwittsList/TwittsList";
+import { useActivePageContext } from "../../Lib/Context/ActivePageContext";
 import { TwittsContext } from "../../Lib/Context/TwitterContext";
-import { type TwittType } from "../../Lib/Types/types";
+import { useUserContext } from "../../Lib/Context/UserContext";
+import { Pages, type TwittType } from "../../Lib/Types/types";
 import "./HomePage.css";
 
 export function HomePage() {
+
+    const [user] = useUserContext();
+    if (!user.length) // navigate to login form if not logged - in
+        useNavigate()(Pages.Login);
+
+    const [, setActivePage] = useActivePageContext()
+    setActivePage(Pages.Home);
     const [twitts, setTwitts] = useState<TwittType[]>([]);
 
     useEffect(() => {
         async function getTwitts(): Promise<void> {
             try {
                 let { data, error } = await supabaseDB.from(dbName).select('*');
-                if(error) throw error;
+                if (error) throw error;
+                if (!data?.length) throw new Error('Posts are not available');
                 setTwitts(data as TwittType[])
             } catch (error: any) {
                 console.log(error.message);
