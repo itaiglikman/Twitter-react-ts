@@ -1,39 +1,55 @@
 import { Burger, Container, Group, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { MantineLogo } from '@mantinex/mantine-logo';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import classes from './Header.module.css';
+import { supabaseDB } from '../../../../DB/supabaseConfig';
+import { useActivePageContext } from '../../../Lib/Context/ActivePageContext';
 import { useUserContext } from '../../../Lib/Context/UserContext';
+import { Pages } from '../../../Lib/Types/types';
+import classes from './Header.module.css';
 
-const links = [
-    { link: '/', label: 'Home' },
-    { link: '/profile', label: 'Profile' },
-];
+type Item = {
+    link: string,
+    label: string
+}
 
 export function Header() {
+
+    const [userName, setUserName] = useUserContext();
     const [opened, { toggle }] = useDisclosure(false);
-    const [active, setActive] = useState(links[0].link);
-    const [userName] = useUserContext();
+    const [active, setActive] = useActivePageContext()
     const navigate = useNavigate();
 
+    const homeItem = { link: Pages.Home, label: 'Home' }
+    const loginItem = { link: Pages.Login, label: 'Login' }
+    const logoutItem = { link: Pages.Login, label: 'Logout' }
+    
     const displayedUserName = userName.length ? userName : 'Guest';
 
-    const items = links.map((link) => (
+    const item = (link: Item) => (
         <a
             key={link.label}
             className={classes.link}
             href={link.link}
             data-active={active === link.link || undefined}
-            onClick={(event) => {
-                event.preventDefault();
-                setActive(link.link);
-                navigate(link.link)
-            }}
+            onClick={(e) => handleItemClick(e, link)}
         >
             {link.label}
         </a>
-    ));
+    )
+
+    function handleItemClick(event: React.MouseEvent<HTMLAnchorElement>, link: Item) {
+        event.preventDefault();
+        setActive(link.link as Pages);
+        if (link.label === 'Logout') handleLogout();
+        navigate(link.link);
+    }
+
+    async function handleLogout() {
+        await supabaseDB.auth.signOut();
+        setUserName('');
+        setActive(Pages.Login);
+    }
 
     return (
         <header className={classes.header}>
@@ -43,7 +59,8 @@ export function Header() {
                     <Text className={classes.link}>
                         Hello {displayedUserName}
                     </Text>
-                    {items}
+                    {item(homeItem)}
+                    {item(userName.length ? logoutItem : loginItem)}
                 </Group>
 
                 <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
