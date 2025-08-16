@@ -1,6 +1,6 @@
 import { Burger, Container, Group, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { MantineLogo } from '@mantinex/mantine-logo';
+import { TwitterIcon } from '@mantinex/dev-icons';
 import { useNavigate } from 'react-router-dom';
 import { supabaseDB } from '../../../../DB/supabaseConfig';
 import { useActivePageContext } from '../../../Lib/Context/ActivePageContext';
@@ -54,7 +54,7 @@ export function Header() {
     return (
         <header className={classes.header}>
             <Container size="md" className={classes.inner}>
-                <MantineLogo size={28} />
+                <TwitterIcon size={28} color="#00ACEE" />
                 <Group gap={5} visibleFrom="xs">
                     <Text className={classes.link}>
                         Hello {displayedUserName}
