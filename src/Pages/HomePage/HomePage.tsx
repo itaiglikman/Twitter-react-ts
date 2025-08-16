@@ -12,14 +12,18 @@ import "./HomePage.css";
 export function HomePage() {
 
     const [user] = useUserContext();
-    if (!user.length) // navigate to login form if not logged - in
-        useNavigate()(Pages.Login);
+    const navigate = useNavigate();
 
     const [, setActivePage] = useActivePageContext()
     setActivePage(Pages.Home);
     const [twitts, setTwitts] = useState<TwittType[]>([]);
 
     useEffect(() => {
+        if (!user.length) { // navigate to login form if not logged - in
+            navigate(Pages.Login);
+            return;
+        }
+
         async function getTwitts(): Promise<void> {
             try {
                 let { data, error } = await supabaseDB.from(dbName).select('*');

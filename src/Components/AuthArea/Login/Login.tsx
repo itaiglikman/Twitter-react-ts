@@ -17,6 +17,7 @@ import { Pages } from '../../../Lib/Types/types';
 import validateUtils from '../../../Lib/Utils/validateUtils';
 import "./Login.css";
 import classes from './Login.module.css';
+import notifyService from '../../../Lib/Services/NotifyService';
 
 export function Login() {
     const [, setActivePage] = useActivePageContext()
@@ -47,9 +48,11 @@ export function Login() {
             if (data.user.email)
                 // throw error if no user name
                 setUser(data.user.email)
+
+            notifyService.success(`Successfully logged-in`)
             navigate(Pages.Home);
         } catch (error: any) {
-            setFormError("Login failed. Please try again.");
+            notifyService.error("Login failed. Please try again.");
             console.log(error);
         }
     }

@@ -6,6 +6,7 @@ import "./CreateTwitt.css";
 import classes from './CreateTwitt.module.css';
 import { useUserContext } from '../../../Lib/Context/UserContext';
 import { dbName, supabaseDB } from '../../../../DB/supabaseConfig';
+import notifyService from '../../../Lib/Services/NotifyService';
 
 export function CreateTwitt() {
     // mantine:
@@ -22,7 +23,6 @@ export function CreateTwitt() {
     const isDisabled = // don't allow posting
         content.trim() === "" // no content
         || content.trim().length > 140 // over max chars
-        //not working
         || !twitts //while loading posts 
         || !userName
 
@@ -33,12 +33,11 @@ export function CreateTwitt() {
             const { data, error } = await supabaseDB.from(dbName).insert([post]).select();
             if (error) throw error;
             const dbPost = data[0];
-            //should get twitts from server
             setTwitts([...twitts, dbPost]);
             setContent('');
             setErrMsg('');
         } catch (error: any) {
-            setErrMsg("Couldn't post the tweet...");
+            notifyService.error("Couldn't post the tweet...");
             console.log(error);
         }
     }
