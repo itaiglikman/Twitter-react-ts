@@ -18,6 +18,7 @@ import twittsUtils from '../../../Lib/Utils/twittsUtils';
 import validateUtils from '../../../Lib/Utils/validateUtils';
 import "./Register.css";
 import classes from './Register.module.css';
+import notifyService from '../../../Lib/Services/NotifyService';
 
 
 export function Register() {
@@ -40,7 +41,6 @@ export function Register() {
 
     async function handleSubmit(values: { email: string, userName: string, password: string }) {
         try {
-            console.log('values: ', values);
             // If there are no errors, navigate
             if (form.validate().hasErrors)
                 throw form.errors;
@@ -57,12 +57,13 @@ export function Register() {
                 return setFormError(error.message);
             }
             if (data.user?.user_metadata.userName) {
-                console.log('data:', data);
-                setUser(data.user?.user_metadata.userName)
+                const userName = data.user.user_metadata.userName
+                setUser(userName)
+                notifyService.success(`Successfully signed-in`)
             }
             navigate(Pages.Home);
         } catch (error: any) {
-            setFormError("Register failed. Please try again.");
+            notifyService.error("Register failed. Please try again.");
             console.log(error);
         }
     }
