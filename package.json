@@ -15,7 +15,7 @@
         "@mantine/core": "^8.2.4",
         "@mantine/form": "^8.2.4",
         "@mantine/hooks": "^8.2.4",
-        "@mantinex/mantine-logo": "^2.0.0",
+        "@mantinex/dev-icons": "^2.0.0",
         "@supabase/supabase-js": "^2.55.0",
         "axios": "^1.11.0",
         "react": "^19.1.0",
