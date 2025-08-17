@@ -50,7 +50,7 @@ npm install
 ### 3. Supabase Setup
 
 This project uses Supabase for backend and authentication.  
-**Your Supabase credentials are stored in `src/env.ts`, which is excluded from GitHub for security.**
+**Your Supabase credentials are stored in `.env.local`, which is excluded from GitHub for security.**
 
 #### To use your own Supabase backend:
 
@@ -62,11 +62,11 @@ This project uses Supabase for backend and authentication.
    - `date` (text, ISO string)
 3. Enable [Row Level Security (RLS)](https://supabase.com/docs/guides/auth/row-level-security) and add policies for authenticated users.
 4. In your Supabase project, go to **Project Settings > API** and copy your `SUPABASE_URL` and `SUPABASE_ANON_KEY`.
-5. Create a file `src/env.ts`:
+5. Create a file `.env.local` in the project root:
 
-```ts
-export const SUPABASE_URL = 'your-supabase-url';
-export const SUPABASE_ANON_KEY = 'your-supabase-anon-key';
+```
+VITE_SUPABASE_URL=https://your-supabase-url.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
 6. The app will automatically use these credentials for all API calls.
